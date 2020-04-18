@@ -31,6 +31,7 @@ option(ENABLE_FUZZING "Fuzz testing using LLVM's libFuzzer" OFF)
 option(ENABLE_GOLD_LINKER "Use GNU gold linker if available" ON)
 option(ENABLE_NODE_BINDINGS "Build NodeJs bindings" OFF)
 option(ENABLE_GLIBC_WORKAROUND "Workaround GLIBC symbol exports" OFF)
+option(ENABLE_SWIG_BINDINGS "Use SWIG to compile Java bindings" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -158,6 +159,47 @@ add_library(UPDATER OBJECT ${UpdaterGlob})
 add_library(STORAGE OBJECT ${StorageGlob})
 add_library(ENGINE OBJECT ${EngineGlob})
 add_library(SERVER OBJECT ${ServerGlob})
+
+# swig for Java and upcoming Python bindings
+if (ENABLE_SWIG_BINDINGS)
+  find_package(SWIG 3.0 REQUIRED)
+  find_package(Java 1.8 COMPONENTS Development)
+  find_package(PythonInterp)
+  find_package(PythonLibs)
+  message(STATUS "Using SWIG ${SWIG_VERSION} to generate Java and / or Python bindings")
+  include(${SWIG_USE_FILE})
+  set_source_files_properties(*.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
+
+  # Use the newer target name preference
+  set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
+
+  file(GLOB SwigSourcesGlob swig/*.i swig/*.cpp swig/**/*.cpp)
+
+  if(JAVA_FOUND)
+  swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
+  set_target_properties (SWIG_JNI PROPERTIES
+          INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
+          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+          OUTPUT_NAME swig_jni_bindings
+          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
+  target_link_libraries(SWIG_JNI PRIVATE LIBOSRM)
+  #TODO compile the Java file generate and install
+ endif()
+
+#  if(PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND)
+#  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
+#  set_target_properties (SWIG_PYTHON PROPERTIES
+#          INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
+#          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+#          OUTPUT_NAME swig_python_bindings
+#          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+#          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+#          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
+#  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
+#  endif()
+endif()
 
 set_target_properties(UTIL PROPERTIES LINKER_LANGUAGE CXX)
 
@@ -871,6 +913,6 @@ if (ENABLE_NODE_BINDINGS)
     endif()
     list(APPEND sources ${filename})
   endforeach()
-  add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources})
+  add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources} swig/swig.cpp)
   set_target_properties(check-headers PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${check_headers_dir})
 endif()
