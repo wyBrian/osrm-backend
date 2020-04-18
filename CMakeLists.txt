@@ -165,7 +165,6 @@ if (ENABLE_SWIG_JNI_BINDINGS)
   find_package(SWIG 3.0 REQUIRED)
   find_package(Java 1.8 COMPONENTS Development)
   set(JAVA_AWT_LIBRARY NotNeeded)
-  set(JAVA_JVM_LIBRARY NotNeeded)
   set(JAVA_AWT_INCLUDE_PATH NotNeeded)
   find_package(JNI 1.8 REQUIRED)
   find_package(PythonInterp)
@@ -182,29 +181,15 @@ if (ENABLE_SWIG_JNI_BINDINGS)
   if(JAVA_FOUND AND JNI_FOUND)
     swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
     set_target_properties (SWIG_JNI PROPERTIES
-            INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
-            INCLUDE_DIRECTORIES ${JAVA_INCLUDE_PATH}
-            INCLUDE_DIRECTORIES ${JAVA_INCLUDE_PATH2}
+            INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include" "${JAVA_INCLUDE_PATH}" "${JAVA_INCLUDE_PATH2}"
             SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
             OUTPUT_NAME swig_jni_bindings
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
-    target_link_libraries(SWIG_JNI PRIVATE LIBOSRM)
+    target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
     #TODO compile the Java file generate and install
   endif()
-
-  #  if(PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND)
-  #  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
-  #  set_target_properties (SWIG_PYTHON PROPERTIES
-  #          INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
-  #          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-  #          OUTPUT_NAME swig_python_bindings
-  #          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-  #          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-  #          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
-  #  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
-  #  endif()
 endif()
 
 if (ENABLE_SWIG_PYTHON_BINDINGS)
