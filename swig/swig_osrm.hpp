@@ -1,6 +1,8 @@
 #ifndef OSRM_SWIG_OSRM_HPP
 #define OSRM_SWIG_OSRM_HPP
 
+#include <vector>
+
 #include "util/exception_utils.hpp"
 #include "util/log.hpp"
 #include "util/meminfo.hpp"
@@ -19,131 +21,129 @@
 #include "osrm/osrm.hpp"
 #include "osrm/storage_config.hpp"
 
-namespace swig {
-    enum Profile {
-        CAR, BIKE, FOOT
-    };
+enum Profile {
+    CAR, BIKE, FOOT
+};
 
-    class Coordinate {
-    public:
-        explicit Coordinate(float lat, float lon) {
-            if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lat > 180.0) {
-                throw std::out_of_range("latitude" + std::to_string(lat) + " or longitude " + std::to_string(lon) + " out of range");
-            }
-            this->lat = lat;
-            this->lon = lon;
+class Coordinate {
+public:
+    explicit Coordinate(float lat, float lon) {
+        if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lat > 180.0) {
+            throw std::out_of_range("latitude" + std::to_string(lat) + " or longitude " + std::to_string(lon) + " out of range");
         }
-        float getLat() {
-            return this->lat;
+        this->lat = lat;
+        this->lon = lon;
+    }
+    float getLat() {
+        return this->lat;
+    }
+    float getLon() {
+        return this->lon;
+    }
+
+private:
+    float lat;
+    float lon;
+};
+
+class Bearing {
+public:
+    explicit Bearing(float bearing) {
+        if (bearing >= 360.0 || bearing < 0.0) {
+            throw std::out_of_range("bearing " + std::to_string(bearing) + " out of range");
         }
-        float getLon() {
-            return this->lon;
+        this->bearing = bearing;
+    }
+    float getBearing() {
+        return this->bearing;
+    }
+
+private:
+    float bearing;
+};
+
+class Radius {
+public:
+    explicit Radius(float radius) {
+        if (radius < 0.0) {
+            throw std::out_of_range("radius " + std::to_string(radius) + " out of range");
         }
+        this->radius = radius;
+    }
+    float getRadius() {
+        return this->radius;
+    }
 
-    private:
-        float lat;
-        float lon;
-    };
+private:
+    float radius;
+};
 
-    class Bearing {
-    public:
-        explicit Bearing(float bearing) {
-            if (bearing >= 360.0 || bearing < 0.0) {
-                throw std::out_of_range("bearing " + std::to_string(bearing) + " out of range");
-            }
-            this->bearing = bearing;
-        }
-        float getBearing() {
-            return this->bearing;
-        }
+struct BaseParameters {
+    Profile profile;
+    std::vector<Coordinate> coordinates;
+    std::vector<Bearing> bearings;
+    std::vector<Radius> radiuses;
+};
 
-    private:
-        float bearing;
-    };
+struct RouteParameters : BaseParameters {
 
-    class Radius {
-    public:
-        explicit Radius(float radius) {
-            if (radius < 0.0) {
-                throw std::out_of_range("radius " + std::to_string(radius) + " out of range");
-            }
-            this->radius = radius;
-        }
-        float getRadius() {
-            return this->radius;
-        }
+};
 
-    private:
-        float radius;
-    };
+struct TableParameters : BaseParameters {
 
-    struct BaseParameters {
-        Profile profile;
-        std::vector<Coordinate> coordinates;
-        std::vector<Bearing> bearings;
-        std::vector<Radius> radiuses;
-    };
+};
 
-    struct RouteParameters : BaseParameters {
+struct NearestParameters : BaseParameters {
 
-    };
+};
 
-    struct TableParameters : BaseParameters {
+struct TripParameters : BaseParameters {
 
-    };
+};
 
-    struct NearestParameters : BaseParameters {
+struct MatchParameters : BaseParameters {
 
-    };
+};
 
-    struct TripParameters : BaseParameters {
+struct TileParameters : BaseParameters {
 
-    };
+};
 
-    struct MatchParameters : BaseParameters {
+class ServiceHandler {
+public:
+    explicit ServiceHandler(osrm::EngineConfig &config) : routing_machine(config) {
+    }
 
-    };
+    ~ServiceHandler() {}
 
-    struct TileParameters : BaseParameters {
+    osrm::engine::Status Route(const RouteParameters &params, std::string &result);
 
-    };
+    osrm::engine::Status Table(const TableParameters &params, std::string &result);
 
-    class ServiceHandler {
-    public:
-        explicit ServiceHandler(osrm::EngineConfig &config) : routing_machine(config) {
-        }
+    osrm::engine::Status Nearest(const NearestParameters &params, std::string &result);
 
-        ~ServiceHandler() {}
+    osrm::engine::Status Trip(const TripParameters &params, std::string &result);
 
-        osrm::engine::Status Route(const swig::RouteParameters &params, std::string &result);
+    osrm::engine::Status Match(const MatchParameters &params, std::string &result);
 
-        osrm::engine::Status Table(const swig::TableParameters &params, std::string &result);
+    osrm::engine::Status Tile(const TileParameters &params, std::string &result);
 
-        osrm::engine::Status Nearest(const swig::NearestParameters &params, std::string &result);
+private:
+    osrm::OSRM routing_machine;
 
-        osrm::engine::Status Trip(const swig::TripParameters &params, std::string &result);
+    osrm::engine::api::RouteParameters translate(const RouteParameters &raw);
 
-        osrm::engine::Status Match(const swig::MatchParameters &params, std::string &result);
+    osrm::engine::api::TableParameters translate(const TableParameters &raw);
 
-        osrm::engine::Status Tile(const swig::TileParameters &params, std::string &result);
+    osrm::engine::api::NearestParameters translate(const NearestParameters &raw);
 
-    private:
-        osrm::OSRM routing_machine;
+    osrm::engine::api::TripParameters translate(const TripParameters &raw);
 
-        osrm::engine::api::RouteParameters translate(const swig::RouteParameters &raw);
+    osrm::engine::api::MatchParameters translate(const MatchParameters &raw);
 
-        osrm::engine::api::TableParameters translate(const swig::TableParameters &raw);
+    osrm::engine::api::TileParameters translate(const TileParameters &raw);
 
-        osrm::engine::api::NearestParameters translate(const swig::NearestParameters &raw);
-
-        osrm::engine::api::TripParameters translate(const swig::TripParameters &raw);
-
-        osrm::engine::api::MatchParameters translate(const swig::MatchParameters &raw);
-
-        osrm::engine::api::TileParameters translate(const swig::TileParameters &raw);
-
-        void serialize(const osrm::util::json::Object &json, std::string &txt);
-    };
-}
+    void serialize(const osrm::util::json::Object &json, std::string &txt);
+};
 
 #endif //OSRM_SWIG_OSRM_HPP
