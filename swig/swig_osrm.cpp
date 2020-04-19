@@ -10,37 +10,34 @@ namespace swig {
 
     osrm::engine::Status ServiceHandler::Table(const swig::MatchParameters raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res =  this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Nearest(const swig::NearestParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res =  this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Trip(const swig::TripParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res =  this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Match(const swig::MatchParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res =  this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Tile(const swig::TileParameters &raw_params, std::string &result) {
-        osrm::util::json::Object json;
-        auto res =  this->routing_machine.Table(&this->translate(raw_params), &json);
-        this->serialize(json, result);
-        return res;
+        return this->routing_machine.Table(&this->translate(raw_params), result);
     }
 
     swig::RouteParameters ServiceHandler::translate(const swig::RouteParameters &raw) {
@@ -67,7 +64,7 @@ namespace swig {
         return TileParameters();
     }
 
-    void ServiceHandler::serialize(osrm::json::Object &json, std::string &txt) {
+    void ServiceHandler::serialize(osrm::util::json::Object &json, std::string &txt) {
         //TODO implement it
     }
 }
