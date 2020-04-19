@@ -202,7 +202,7 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
             RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
-    target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
+    target_link_libraries(SWIG_JNI PRIVATE osrm ${JAVA_JVM_LIBRARY})
     #TODO compile the Java file generate and install
   endif()
   if (ENABLE_SWIG_PYTHON_BINDINGS)
@@ -213,7 +213,7 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
     #          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
     #          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
     #          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
-    #  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
+    #  target_link_libraries(SWIG_PYTHON PRIVATE osrm)
   endif()
 endif()
 
