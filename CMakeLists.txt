@@ -185,12 +185,12 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
     find_package(PythonLibs REQUIRED)
   endif()
   include(${SWIG_USE_FILE})
-  set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
+  set_source_files_properties(swig/osrm.swg PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
 
   # Use the newer target name preference
   set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
 
-  file(GLOB SwigSourcesGlob swig/osrm.i swig/*.cpp swig/**/*.cpp)
+  file(GLOB SwigSourcesGlob swig/osrm.swg swig/*.cpp swig/**/*.cpp)
 
   include_directories(BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/swig/")
 
