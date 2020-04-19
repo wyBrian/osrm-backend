@@ -1,5 +1,8 @@
 #include "swig_osrm.hpp"
 
+//FIXME remove this when ready
+#pragma GCC diagnostic ignored "-Wunused-parameter"
+
 namespace swig {
     osrm::engine::Status ServiceHandler::Route(const swig::RouteParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
@@ -40,31 +43,32 @@ namespace swig {
         return this->routing_machine.Tile(this->translate(raw_params), result);
     }
 
-    swig::RouteParameters ServiceHandler::translate(const swig::RouteParameters &raw) {
-        return RouteParameters();
+    osrm::engine::api::RouteParameters ServiceHandler::translate(const swig::RouteParameters &raw) {
+        return osrm::engine::api::RouteParameters();
     }
 
-    swig::TableParameters ServiceHandler::translate(const swig::TableParameters &raw) {
-        return TableParameters();
+    osrm::engine::api::TableParameters ServiceHandler::translate(const swig::TableParameters &raw) {
+        return osrm::engine::api::TableParameters();
     }
 
-    swig::NearestParameters ServiceHandler::translate(const swig::NearestParameters &raw) {
-        return NearestParameters();
+    osrm::engine::api::NearestParameters ServiceHandler::translate(const swig::NearestParameters &raw) {
+        return osrm::engine::api::NearestParameters();
     }
 
-    swig::TripParameters ServiceHandler::translate(const swig::TripParameters &raw) {
-        return TripParameters();
+    osrm::engine::api::TripParameters ServiceHandler::translate(const swig::TripParameters &raw) {
+        return osrm::engine::api::TripParameters();
     }
 
-    swig::MatchParameters ServiceHandler::translate(const swig::MatchParameters &raw) {
-        return MatchParameters();
+    osrm::engine::api::MatchParameters ServiceHandler::translate(const swig::MatchParameters &raw) {
+        return osrm::engine::api::MatchParameters();
     }
 
-    swig::TileParameters ServiceHandler::translate(const swig::TileParameters &raw) {
-        return TileParameters();
+    osrm::engine::api::TileParameters ServiceHandler::translate(const swig::TileParameters &raw) {
+        return osrm::engine::api::TileParameters();
     }
 
-    void ServiceHandler::serialize(osrm::util::json::Object &json, std::string &txt) {
+    void ServiceHandler::serialize(const osrm::util::json::Object &json, std::string &txt) {
         //TODO implement it
+        txt = "";
     }
 }
