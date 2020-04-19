@@ -5,8 +5,6 @@
 #include "swig_osrm.hpp"
 %}
 
-%include "swig_osrm.hpp"
-
 #ifdef SWIGJAVA   //swig到java的swig预定义宏
 %include <enums.swg>
 %template(CoordinateVector) std::vector<Coordinate>;
@@ -16,3 +14,5 @@
 %rename(BearingVector) Vector<Bearing>;
 %rename(RadiusVector) Vector<Radius>;
 #endif
+
+%include "swig_osrm.hpp"
