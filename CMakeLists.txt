@@ -171,55 +171,50 @@ if(POLICY CMP0086)
   cmake_policy(SET CMP0086 NEW)
 endif()
 
-if (ENABLE_SWIG_JNI_BINDINGS)
+if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
   find_package(SWIG 3.0 REQUIRED)
-  find_package(Java 1.8 COMPONENTS Development)
-  set(JAVA_AWT_LIBRARY NotNeeded)
-  set(JAVA_AWT_INCLUDE_PATH NotNeeded)
-  find_package(JNI 1.8 REQUIRED)
   message(STATUS "Using SWIG ${SWIG_VERSION} to generate Java and / or Python bindings")
+  if (ENABLE_SWIG_JNI_BINDINGS)
+    find_package(Java 1.8 COMPONENTS Development)
+    set(JAVA_AWT_LIBRARY NotNeeded)
+    set(JAVA_AWT_INCLUDE_PATH NotNeeded)
+    find_package(JNI 1.8 REQUIRED)
+  endif()
+  if (ENABLE_SWIG_PYTHON_BINDINGS)
+    find_package(PythonInterp REQUIRED)
+    find_package(PythonLibs REQUIRED)
+  endif()
   include(${SWIG_USE_FILE})
-  set_source_files_properties(osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
+  set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
 
   # Use the newer target name preference
   set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
 
   file(GLOB SwigSourcesGlob swig/osrm.i swig/*.cpp swig/**/*.cpp)
 
-  swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
-  include_directories("${JAVA_INCLUDE_PATH}")
-  include_directories("${JAVA_INCLUDE_PATH2}")
-  set_target_properties (SWIG_JNI PROPERTIES
-          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-          OUTPUT_NAME swig_jni_bindings
-          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
-  target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
-  #TODO compile the Java file generate and install
-endif()
-
-if (ENABLE_SWIG_PYTHON_BINDINGS)
-  find_package(SWIG 3.0 REQUIRED)
-  find_package(PythonInterp REQUIRED)
-  find_package(PythonLibs REQUIRED)
-  message(STATUS "Using SWIG ${SWIG_VERSION} to generate Java and / or Python bindings")
-  include(${SWIG_USE_FILE})
-  set_source_files_properties(*.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
-
-  # Use the newer target name preference
-  set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
-
-  file(GLOB SwigSourcesGlob swig/*.i swig/*.cpp swig/**/*.cpp)
-
-#  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
-#  set_target_properties (SWIG_PYTHON PROPERTIES
-#          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-#          OUTPUT_NAME swig_python_bindings
-#          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-#          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-#          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
-#  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
+  if (ENABLE_SWIG_JNI_BINDINGS)
+    swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
+    include_directories("${JAVA_INCLUDE_PATH}")
+    include_directories("${JAVA_INCLUDE_PATH2}")
+    set_target_properties (SWIG_JNI PROPERTIES
+            SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+            OUTPUT_NAME swig_jni_bindings
+            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
+    target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
+    #TODO compile the Java file generate and install
+  endif()
+  if (ENABLE_SWIG_PYTHON_BINDINGS)
+    #  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
+    #  set_target_properties (SWIG_PYTHON PROPERTIES
+    #          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+    #          OUTPUT_NAME swig_python_bindings
+    #          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+    #          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+    #          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
+    #  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
+  endif()
 endif()
 
 set_target_properties(UTIL PROPERTIES LINKER_LANGUAGE CXX)
