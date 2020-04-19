@@ -19,67 +19,36 @@
 #include "osrm/osrm.hpp"
 #include "osrm/storage_config.hpp"
 
-#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
-
-#include <boost/algorithm/string/case_conv.hpp>
-#include <boost/any.hpp>
-#include <boost/filesystem.hpp>
-#include <boost/program_options.hpp>
-
-#include <csignal>
-#include <cstdlib>
-
-#include <chrono>
-#include <exception>
-#include <future>
-#include <iostream>
-#include <memory>
-#include <new>
-#include <string>
-
-class ServiceHandlerInterface
-{
-public:
-    virtual ~ServiceHandlerInterface() = default;
-    virtual osrm::engine::Status Route(const osrm::engine::api::RouteParameters &params, osrm::util::json::Object &result) = 0;
-    virtual osrm::engine::Status Table(const osrm::engine::api::TableParameters &params, osrm::util::json::Object &result) = 0;
-    virtual osrm::engine::Status Nearest(const osrm::engine::api::NearestParameters &params, osrm::util::json::Object &result) = 0;
-    virtual osrm::engine::Status Trip(const osrm::engine::api::TripParameters &params, osrm::util::json::Object &result) = 0;
-    virtual osrm::engine::Status Match(const osrm::engine::api::MatchParameters &params, osrm::util::json::Object &result) = 0;
-    virtual osrm::engine::Status Tile(const osrm::engine::api::TileParameters &params, std::string &result) = 0;
-};
-
-class ServiceHandler final : public ServiceHandlerInterface
+class ServiceHandler final
 {
 public:
     explicit ServiceHandler(osrm::EngineConfig &config) : routing_machine(config) {
     }
 
-    ~ServiceHandler() override {
+    ~ServiceHandler() {
     }
 
-    osrm::engine::Status Route(const osrm::engine::api::RouteParameters &params, osrm::util::json::Object &result) override {
+    osrm::engine::Status Route(const osrm::engine::api::RouteParameters &params, osrm::util::json::Object &result) {
         return this->routing_machine.Route(params, result);
     }
 
-    osrm::engine::Status Table(const osrm::engine::api::TableParameters &params, osrm::util::json::Object &result) override {
+    osrm::engine::Status Table(const osrm::engine::api::TableParameters &params, osrm::util::json::Object &result) {
         return this->routing_machine.Table(params, result);
     }
 
-    osrm::engine::Status Nearest(const osrm::engine::api::NearestParameters &params, osrm::util::json::Object &result) override {
+    osrm::engine::Status Nearest(const osrm::engine::api::NearestParameters &params, osrm::util::json::Object &result) {
         return this->routing_machine.Nearest(params, result);
     }
 
-    osrm::engine::Status Trip(const osrm::engine::api::TripParameters &params, osrm::util::json::Object &result) override {
+    osrm::engine::Status Trip(const osrm::engine::api::TripParameters &params, osrm::util::json::Object &result) {
         return this->routing_machine.Trip(params, result);
     }
 
-    osrm::engine::Status Match(const osrm::engine::api::MatchParameters &params, osrm::util::json::Object &result) override {
+    osrm::engine::Status Match(const osrm::engine::api::MatchParameters &params, osrm::util::json::Object &result) {
         return this->routing_machine.Match(params, result);
     }
 
-    osrm::engine::Status Tile(const osrm::engine::api::TileParameters &params, std::string &result) override {
+    osrm::engine::Status Tile(const osrm::engine::api::TileParameters &params, std::string &result) {
         return this->routing_machine.Tile(params, result);
     }
 
