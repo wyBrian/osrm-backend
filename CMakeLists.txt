@@ -195,15 +195,23 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
   include_directories(BEFORE "${CMAKE_CURRENT_SOURCE_DIR}/swig/")
 
   if (ENABLE_SWIG_JNI_BINDINGS)
-    swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
+    swig_add_library(
+            SWIG_JNI
+            TYPE SHARED
+            LANGUAGE java
+            OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java
+            SOURCES ${SwigSourcesGlob}
+    )
     include_directories(SYSTEM "${JAVA_INCLUDE_PATH}")
     include_directories(SYSTEM "${JAVA_INCLUDE_PATH2}")
-    set_target_properties (SWIG_JNI PROPERTIES
+    set_target_properties (
+            SWIG_JNI PROPERTIES
             SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
             OUTPUT_NAME swig_jni_bindings
             LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
             ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
+            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+    )
     target_link_libraries(SWIG_JNI PRIVATE osrm ${JAVA_JVM_LIBRARY})
     #TODO compile the Java file generate and install
   endif()
