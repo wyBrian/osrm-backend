@@ -117,7 +117,7 @@ namespace swig {
 
         osrm::engine::Status Route(const swig::RouteParameters &params, std::string &result);
 
-        osrm::engine::Status Table(const swig::MatchParameters params, std::string &result);
+        osrm::engine::Status Table(const swig::MatchParameters &params, std::string &result);
 
         osrm::engine::Status Nearest(const swig::NearestParameters &params, std::string &result);
 

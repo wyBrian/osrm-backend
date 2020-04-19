@@ -8,7 +8,7 @@ namespace swig {
         return res;
     }
 
-    osrm::engine::Status ServiceHandler::Table(const swig::MatchParameters raw_params, std::string &result) {
+    osrm::engine::Status ServiceHandler::Table(const swig::MatchParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
         auto res = this->routing_machine.Table(this->translate(raw_params), json);
         this->serialize(json, result);
