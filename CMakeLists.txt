@@ -161,6 +161,16 @@ add_library(STORAGE OBJECT ${StorageGlob})
 add_library(ENGINE OBJECT ${EngineGlob})
 add_library(SERVER OBJECT ${ServerGlob})
 
+# SWIG: use standard target name.
+if(POLICY CMP0078)
+  cmake_policy(SET CMP0078 NEW)
+endif()
+
+# SWIG: use SWIG_MODULE_NAME property.
+if(POLICY CMP0086)
+  cmake_policy(SET CMP0086 NEW)
+endif()
+
 if (ENABLE_SWIG_JNI_BINDINGS)
   find_package(SWIG 3.0 REQUIRED)
   find_package(Java 1.8 COMPONENTS Development)
@@ -169,12 +179,12 @@ if (ENABLE_SWIG_JNI_BINDINGS)
   find_package(JNI 1.8 REQUIRED)
   message(STATUS "Using SWIG ${SWIG_VERSION} to generate Java and / or Python bindings")
   include(${SWIG_USE_FILE})
-  set_source_files_properties(*.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
+  set_source_files_properties(osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
 
   # Use the newer target name preference
   set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
 
-  file(GLOB SwigSourcesGlob swig/*.i swig/*.cpp swig/**/*.cpp)
+  file(GLOB SwigSourcesGlob swig/osrm.i swig/*.cpp swig/**/*.cpp)
 
   swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
   include_directories("${JAVA_INCLUDE_PATH}")
