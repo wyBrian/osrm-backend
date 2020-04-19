@@ -11,15 +11,17 @@
 #include "util/typedefs.hpp"
 #include "util/version.hpp"
 
-#include "osrm/engine_config.hpp"
-#include "osrm/exception.hpp"
-#include "osrm/osrm.hpp"
-#include "osrm/storage_config.hpp"
-
 #include "storage/serialization.hpp"
 #include "storage/shared_memory.hpp"
 #include "storage/shared_monitor.hpp"
 #include "storage/storage.hpp"
+
+#include "engine/engine.hpp"
+
+#include "osrm/engine_config.hpp"
+#include "osrm/exception.hpp"
+#include "osrm/osrm.hpp"
+#include "osrm/storage_config.hpp"
 
 #include <boost/filesystem.hpp>
 #include <boost/program_options.hpp>
@@ -39,6 +41,7 @@
 #include <memory>
 #include <new>
 #include <string>
+
 
 
 #endif //OSRM_SWIG_OSRM_HPP
