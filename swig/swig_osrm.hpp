@@ -19,7 +19,7 @@
 #include "osrm/osrm.hpp"
 #include "osrm/storage_config.hpp"
 
-class ServiceHandler final
+class ServiceHandler
 {
 public:
     explicit ServiceHandler(osrm::EngineConfig &config) : routing_machine(config) {
