@@ -5,10 +5,12 @@
 #include "swig_osrm.hpp"
 %}
 
-%import <stl.i>
-%import "swig_osrm.hpp"
+#ifdef SWIGJAVA
+#endif
 
-%include <std_vector.i>
+%include <stl.i>
+
+%import "swig_osrm.hpp"
 
 %include <enums.swg>
 
@@ -20,11 +22,5 @@
 
 %ignore std::vector<Radius>::vector(size_type);
 %template(RadiusVector) std::vector<Radius>;
-
-#ifdef SWIGJAVA
-%rename(CoordinateVector) Vector<Coordinate>;
-%rename(BearingVector) Vector<Bearing>;
-%rename(RadiusVector) Vector<Radius>;
-#endif
 
 %include "swig_osrm.hpp"
