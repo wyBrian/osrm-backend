@@ -42,37 +42,37 @@ osrm::engine::Status ServiceHandler::Tile(const TileParameters &raw_params, std:
     return this->routing_machine.Tile(this->translate(raw_params), result);
 }
 
-osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParameters &raw) {
+static osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParameters &raw) {
     //TODO implement it
     return osrm::engine::api::RouteParameters();
 }
 
-osrm::engine::api::TableParameters ServiceHandler::translate(const TableParameters &raw) {
+static osrm::engine::api::TableParameters ServiceHandler::translate(const TableParameters &raw) {
     //TODO implement it
     return osrm::engine::api::TableParameters();
 }
 
-osrm::engine::api::NearestParameters ServiceHandler::translate(const NearestParameters &raw) {
+static osrm::engine::api::NearestParameters ServiceHandler::translate(const NearestParameters &raw) {
     //TODO implement it
     return osrm::engine::api::NearestParameters();
 }
 
-osrm::engine::api::TripParameters ServiceHandler::translate(const TripParameters &raw) {
+static osrm::engine::api::TripParameters ServiceHandler::translate(const TripParameters &raw) {
     //TODO implement it
     return osrm::engine::api::TripParameters();
 }
 
-osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParameters &raw) {
+static osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParameters &raw) {
     //TODO implement it
     return osrm::engine::api::MatchParameters();
 }
 
-osrm::engine::api::TileParameters ServiceHandler::translate(const TileParameters &raw) {
+static osrm::engine::api::TileParameters ServiceHandler::translate(const TileParameters &raw) {
     //TODO implement it
     return osrm::engine::api::TileParameters();
 }
 
-void ServiceHandler::serialize(const osrm::util::json::Object &json, std::string &txt) {
+static void ServiceHandler::serialize(const osrm::util::json::Object &json, std::string &txt) {
     //TODO implement it
     txt = "";
 }

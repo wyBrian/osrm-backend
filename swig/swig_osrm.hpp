@@ -127,19 +127,19 @@ public:
 private:
     osrm::OSRM routing_machine;
 
-    osrm::engine::api::RouteParameters translate(const RouteParameters &raw);
+    static osrm::engine::api::RouteParameters translate(const RouteParameters &raw);
 
-    osrm::engine::api::TableParameters translate(const TableParameters &raw);
+    static osrm::engine::api::TableParameters translate(const TableParameters &raw);
 
-    osrm::engine::api::NearestParameters translate(const NearestParameters &raw);
+    static osrm::engine::api::NearestParameters translate(const NearestParameters &raw);
 
-    osrm::engine::api::TripParameters translate(const TripParameters &raw);
+    static osrm::engine::api::TripParameters translate(const TripParameters &raw);
 
-    osrm::engine::api::MatchParameters translate(const MatchParameters &raw);
+    static osrm::engine::api::MatchParameters translate(const MatchParameters &raw);
 
-    osrm::engine::api::TileParameters translate(const TileParameters &raw);
+    static osrm::engine::api::TileParameters translate(const TileParameters &raw);
 
-    void serialize(const osrm::util::json::Object &json, std::string &txt);
+    static void serialize(const osrm::util::json::Object &json, std::string &txt);
 };
 
 #endif //OSRM_SWIG_OSRM_HPP
