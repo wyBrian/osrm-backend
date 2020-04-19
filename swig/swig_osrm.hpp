@@ -27,12 +27,10 @@ enum Profile {
 
 class Coordinate {
 public:
-    explicit Coordinate(float lat, float lon) {
+    explicit Coordinate(float lat, float lon) : lat(lat), lon(lon) {
         if (lat < -90.0 || lat > 90.0 || lon < -180.0 || lat > 180.0) {
             throw std::out_of_range("latitude" + std::to_string(lat) + " or longitude " + std::to_string(lon) + " out of range");
         }
-        this->lat = lat;
-        this->lon = lon;
     }
     float getLat() {
         return this->lat;
@@ -48,11 +46,10 @@ private:
 
 class Bearing {
 public:
-    explicit Bearing(float bearing) {
+    explicit Bearing(float bearing) : bearing(bearing) {
         if (bearing >= 360.0 || bearing < 0.0) {
             throw std::out_of_range("bearing " + std::to_string(bearing) + " out of range");
         }
-        this->bearing = bearing;
     }
     float getBearing() {
         return this->bearing;
@@ -64,11 +61,10 @@ private:
 
 class Radius {
 public:
-    explicit Radius(float radius) {
+    explicit Radius(float radius) : radius(radius) {
         if (radius < 0.0) {
             throw std::out_of_range("radius " + std::to_string(radius) + " out of range");
         }
-        this->radius = radius;
     }
     float getRadius() {
         return this->radius;
