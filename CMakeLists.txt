@@ -32,7 +32,7 @@ option(ENABLE_GOLD_LINKER "Use GNU gold linker if available" ON)
 option(ENABLE_NODE_BINDINGS "Build NodeJs bindings" OFF)
 option(ENABLE_GLIBC_WORKAROUND "Workaround GLIBC symbol exports" OFF)
 option(ENABLE_SWIG_JNI_BINDINGS "Use SWIG to compile Java bindings" ON)
-option(ENABLE_SWIG_JNI_BINDINGS "Use SWIG to compile Python bindings" ON)
+option(ENABLE_SWIG_PYTHON_BINDINGS "Use SWIG to compile Python bindings" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -167,8 +167,6 @@ if (ENABLE_SWIG_JNI_BINDINGS)
   set(JAVA_AWT_LIBRARY NotNeeded)
   set(JAVA_AWT_INCLUDE_PATH NotNeeded)
   find_package(JNI 1.8 REQUIRED)
-  find_package(PythonInterp)
-  find_package(PythonLibs)
   message(STATUS "Using SWIG ${SWIG_VERSION} to generate Java and / or Python bindings")
   include(${SWIG_USE_FILE})
   set_source_files_properties(*.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
@@ -178,18 +176,17 @@ if (ENABLE_SWIG_JNI_BINDINGS)
 
   file(GLOB SwigSourcesGlob swig/*.i swig/*.cpp swig/**/*.cpp)
 
-  if(JAVA_FOUND AND JNI_FOUND)
-    swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
-    set_target_properties (SWIG_JNI PROPERTIES
-            INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include" "${JAVA_INCLUDE_PATH}" "${JAVA_INCLUDE_PATH2}"
-            SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-            OUTPUT_NAME swig_jni_bindings
-            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
-    target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
-    #TODO compile the Java file generate and install
-  endif()
+  swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
+  include_directories("${JAVA_INCLUDE_PATH}")
+  include_directories("${JAVA_INCLUDE_PATH2}")
+  set_target_properties (SWIG_JNI PROPERTIES
+          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+          OUTPUT_NAME swig_jni_bindings
+          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
+          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
+  target_link_libraries(SWIG_JNI PRIVATE LIBOSRM ${JAVA_JVM_LIBRARY})
+  #TODO compile the Java file generate and install
 endif()
 
 if (ENABLE_SWIG_PYTHON_BINDINGS)
@@ -205,17 +202,14 @@ if (ENABLE_SWIG_PYTHON_BINDINGS)
 
   file(GLOB SwigSourcesGlob swig/*.i swig/*.cpp swig/**/*.cpp)
 
-  #  if(PYTHONINTERP_FOUND AND PYTHONLIBS_FOUND)
-  #  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
-  #  set_target_properties (SWIG_PYTHON PROPERTIES
-  #          INCLUDE_DIRECTORIES "${CMAKE_CURRENT_SOURCE_DIR}/include"
-  #          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-  #          OUTPUT_NAME swig_python_bindings
-  #          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-  #          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-  #          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
-  #  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
-  #  endif()
+#  swig_add_library(SWIG_PYTHON TYPE SHARED LANGUAGE python OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/python SOURCES ${SwigSourcesGlob})
+#  set_target_properties (SWIG_PYTHON PROPERTIES
+#          SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+#          OUTPUT_NAME swig_python_bindings
+#          LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+#          ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
+#          RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
+#  target_link_libraries(SWIG_PYTHON PRIVATE PythonLibs::Module)
 endif()
 
 set_target_properties(UTIL PROPERTIES LINKER_LANGUAGE CXX)
