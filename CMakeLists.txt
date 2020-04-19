@@ -192,6 +192,8 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
 
   file(GLOB SwigSourcesGlob swig/osrm.i swig/*.cpp swig/**/*.cpp)
 
+  include_directories("swig")
+
   if (ENABLE_SWIG_JNI_BINDINGS)
     swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
     include_directories("${JAVA_INCLUDE_PATH}")
@@ -929,6 +931,6 @@ if (ENABLE_NODE_BINDINGS)
     endif()
     list(APPEND sources ${filename})
   endforeach()
-  add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources} swig/osrm.i)
+  add_library(check-headers STATIC EXCLUDE_FROM_ALL ${sources})
   set_target_properties(check-headers PROPERTIES ARCHIVE_OUTPUT_DIRECTORY ${check_headers_dir})
 endif()
