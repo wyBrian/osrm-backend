@@ -130,17 +130,17 @@ namespace swig {
     private:
         osrm::OSRM routing_machine;
 
-        swig::RouteParameters translate(RouteParameters &raw);
+        osrm::engine::api::RouteParameters translate(const swig::RouteParameters &raw);
 
-        swig::TableParameters translate(const osrm::engine::api::TableParameters &raw);
+        osrm::engine::api::TableParameters translate(const swig::TableParameters &raw);
 
-        swig::NearestParameters translate(const osrm::engine::api::NearestParameters &raw);
+        osrm::engine::api::NearestParameters translate(const swig::NearestParameters &raw);
 
-        swig::TripParameters translate(const osrm::engine::api::TripParameters &raw);
+        osrm::engine::api::TripParameters translate(const swig::TripParameters &raw);
 
-        swig::MatchParameters translate(const osrm::engine::api::MatchParameters &raw);
+        osrm::engine::api::MatchParameters translate(const swig::MatchParameters &raw);
 
-        swig::TileParameters translate(const osrm::engine::api::TileParameters &raw);
+        osrm::engine::api::TileParameters translate(const swig::TileParameters &raw);
 
         void serialize(const osrm::util::json::Object &json, std::string &txt);
     };
