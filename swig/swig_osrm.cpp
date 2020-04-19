@@ -3,41 +3,41 @@
 namespace swig {
     osrm::engine::Status ServiceHandler::Route(const swig::RouteParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res = this->routing_machine.Route(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Route(this->translate(raw_params), json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Table(const swig::MatchParameters raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(this->translate(raw_params), json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Nearest(const swig::NearestParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(this->translate(raw_params), json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Trip(const swig::TripParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(this->translate(raw_params), json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Match(const swig::MatchParameters &raw_params, std::string &result) {
         osrm::util::json::Object json;
-        auto res = this->routing_machine.Table(&this->translate(raw_params), &json);
+        auto res = this->routing_machine.Table(this->translate(raw_params), json);
         this->serialize(json, result);
         return res;
     }
 
     osrm::engine::Status ServiceHandler::Tile(const swig::TileParameters &raw_params, std::string &result) {
-        return this->routing_machine.Table(&this->translate(raw_params), result);
+        return this->routing_machine.Table(this->translate(raw_params), result);
     }
 
     swig::RouteParameters ServiceHandler::translate(const swig::RouteParameters &raw) {
