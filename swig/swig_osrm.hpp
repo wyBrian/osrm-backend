@@ -46,32 +46,25 @@ private:
 
 class Bearing {
 public:
-    explicit Bearing(float bearing) : bearing(bearing) {
-        if (bearing >= 360.0 || bearing < 0.0) {
-            throw std::out_of_range("bearing " + std::to_string(bearing) + " out of range");
+    explicit Bearing(uint32_t value, uint32_t range) : value(value), range(range) {
+        if (value >= 360 || range >= 180) {
+            throw std::out_of_range("value " + std::to_string(value) + " or range " + std::to_string(range) + " out of range");
         }
     }
-    float getBearing() {
-        return this->bearing;
+    int getValue() {
+        return this->value;
+    }
+    int getRange() {
+        return this->range;
     }
 
 private:
-    float bearing;
+    uint32_t value;
+    uint32_t range;
 };
 
-class Radius {
-public:
-    explicit Radius(float radius) : radius(radius) {
-        if (radius < 0.0) {
-            throw std::out_of_range("radius " + std::to_string(radius) + " out of range");
-        }
-    }
-    float getRadius() {
-        return this->radius;
-    }
-
-private:
-    float radius;
+struct Radius {
+    uint32_t radius;
 };
 
 struct BaseParameters {
@@ -81,28 +74,44 @@ struct BaseParameters {
     std::vector<Radius> radiuses;
 };
 
-struct RouteParameters : BaseParameters {
-
+struct RouteParameters : public BaseParameters {
+    bool alternatives = false;
+    bool steps = false;
+    bool annotations = false;
+    bool returnGeoJson = true;
+    bool returnOverview = false;
 };
 
-struct TableParameters : BaseParameters {
-
+struct TableParameters : public BaseParameters {
+    std::vector<size_t> sources;
+    std::vector<size_t> destinations;
 };
 
-struct NearestParameters : BaseParameters {
-
+struct NearestParameters : public BaseParameters {
+    uint32_t number = 1;
 };
 
-struct TripParameters : BaseParameters {
-
+struct TripParameters : public BaseParameters {
+    bool steps = false;
+    bool annotations = false;
+    bool returnGeoJson = true;
+    bool returnOverview = false;
 };
 
-struct MatchParameters : BaseParameters {
-
+struct MatchParameters : public BaseParameters {
+    bool steps = false;
+    bool annotations = false;
+    bool returnGeoJson = true;
+    bool returnOverview = false;
+    std::vector<long> timestamps;
+    std::vector<double> radiuses;
 };
 
-struct TileParameters : BaseParameters {
-
+struct TileParameters {
+    Profile profile;
+    int x;
+    int y;
+    int zoom;
 };
 
 class ServiceHandler {

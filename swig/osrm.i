@@ -23,4 +23,8 @@
 %ignore std::vector<Radius>::vector(size_type);
 %template(RadiusVector) std::vector<Radius>;
 
+%template(SizeTVector) std::vector<size_t>;
+%template(LongVector) std::vector<long>;
+%template(DoubleVector) std::vector<double>;
+
 %include "swig_osrm.hpp"
