@@ -192,7 +192,7 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
 
   file(GLOB SwigSourcesGlob swig/osrm.i swig/*.cpp swig/**/*.cpp)
 
-  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/include/swig/")
+  include_directories("${CMAKE_CURRENT_SOURCE_DIR}/swig/")
 
   if (ENABLE_SWIG_JNI_BINDINGS)
     swig_add_library(SWIG_JNI TYPE SHARED LANGUAGE java OUTPUT_DIR ${CMAKE_CURRENT_BINARY_DIR}/swig/java SOURCES ${SwigSourcesGlob})
