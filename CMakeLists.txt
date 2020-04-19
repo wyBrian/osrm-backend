@@ -198,6 +198,8 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
 
   if (ENABLE_SWIG_JNI_BINDINGS)
     set(SWIG_JNI_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
+    set(CMAKE_SWIG_OUTDIR ${SWIG_JNI_OUTPUT_DIR})
+    set(CMAKE_SWIG_FLAGS -package "osrm.jni")
     message(STATUS "Swig JNI output dir: ${SWIG_JNI_OUTPUT_DIR}")
     swig_add_library(
             SWIG_JNI
