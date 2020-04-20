@@ -138,17 +138,17 @@ public:
 
     ~ServiceHandler() {}
 
-    osrm::engine::Status Route(const RouteParameters &params, std::string &result);
+    std::string Route(const RouteParameters &params);
 
-    osrm::engine::Status Table(const TableParameters &params, std::string &result);
+    std::string Table(const TableParameters &params);
 
-    osrm::engine::Status Nearest(const NearestParameters &params, std::string &result);
+    std::string Nearest(const NearestParameters &params);
 
-    osrm::engine::Status Trip(const TripParameters &params, std::string &result);
+    std::string Trip(const TripParameters &params);
 
-    osrm::engine::Status Match(const MatchParameters &params, std::string &result);
+    std::string Match(const MatchParameters &params);
 
-    osrm::engine::Status Tile(const TileParameters &params, std::string &result);
+    std::string Tile(const TileParameters &params);
 
 private:
     osrm::OSRM routing_machine;
@@ -165,7 +165,7 @@ private:
 
     static osrm::engine::api::TileParameters translate(const TileParameters &raw);
 
-    static void serialize(const osrm::util::json::Object &json, std::string &txt);
+    static std::string serialize(const osrm::util::json::Object &json);
 
     static osrm::engine::EngineConfig translate(const EngineConfig &raw);
 };
