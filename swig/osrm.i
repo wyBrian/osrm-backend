@@ -15,10 +15,6 @@
 %include <typemaps.i>
 %include <enums.swg>
 
-%typemap(ctype) std::string & "std::string &"
-
-%apply const std::string& {std::string* foo};
-
 %ignore std::vector<Coordinate>::vector(size_type);
 %template(CoordinateVector) std::vector<Coordinate>;
 
