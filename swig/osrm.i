@@ -9,9 +9,6 @@
 #endif
 
 %include <stl.i>
-
-%import "swig_osrm.hpp"
-
 %include <enums.swg>
 
 %ignore std::vector<Coordinate>::vector(size_type);
