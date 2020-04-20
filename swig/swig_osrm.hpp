@@ -13,6 +13,7 @@
 #include "storage/shared_memory.hpp"
 #include "storage/shared_monitor.hpp"
 #include "storage/storage.hpp"
+#include "storage/storage_config.hpp"
 
 #include "engine/engine.hpp"
 
@@ -20,6 +21,22 @@
 #include "osrm/exception.hpp"
 #include "osrm/osrm.hpp"
 #include "osrm/storage_config.hpp"
+
+
+struct EngineConfig {
+    std::string base_path;
+    int max_locations_trip = -1;
+    int max_locations_viaroute = -1;
+    int max_locations_distance_table = -1;
+    int max_locations_map_matching = -1;
+    double max_radius_map_matching = -1.0;
+    int max_results_nearest = -1;
+    int max_alternatives = 3;
+    bool use_mmap = false;
+    bool useMld = false;
+    std::string verbosity;
+    std::string dataset_name;
+};
 
 enum Profile {
     CAR, BIKE, FOOT
@@ -149,6 +166,8 @@ private:
     static osrm::engine::api::TileParameters translate(const TileParameters &raw);
 
     static void serialize(const osrm::util::json::Object &json, std::string &txt);
+
+    static osrm::engine::EngineConfig translate(const EngineConfig &raw);
 };
 
 #endif //OSRM_SWIG_OSRM_HPP

@@ -76,3 +76,21 @@ void ServiceHandler::serialize(const osrm::util::json::Object &json, std::string
     //TODO implement it
     txt = "";
 }
+
+osrm::engine::EngineConfig ServiceHandler::translate(const EngineConfig &raw) {
+    auto cfg = osrm::engine::EngineConfig {};
+    cfg.storage_config = osrm::storage::StorageConfig(boost::filesystem::path(raw.base_path));
+    cfg.max_locations_trip = raw.max_locations_trip;
+    cfg.max_locations_viaroute = raw.max_locations_viaroute;
+    cfg.max_locations_distance_table = raw.max_locations_distance_table;
+    cfg.max_locations_map_matching = raw.max_locations_map_matching;
+    cfg.max_radius_map_matching = raw.max_radius_map_matching;
+    cfg.max_results_nearest = raw.max_results_nearest;
+    cfg.max_alternatives = raw.max_alternatives;
+    cfg.use_shared_memory = false;
+    cfg.use_mmap = raw.use_mmap;
+    cfg.algorithm = raw.useMld ? osrm::engine::EngineConfig::Algorithm::MLD : osrm::engine::EngineConfig::Algorithm::CH;
+    cfg.verbosity = raw.verbosity;
+    cfg.dataset_name = raw.dataset_name;
+    return cfg;
+}
