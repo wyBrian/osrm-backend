@@ -63,25 +63,25 @@ private:
 
 class Bearing {
 public:
-    explicit Bearing(uint32_t value, uint32_t range) : value(value), range(range) {
+    explicit Bearing(unsigned value, unsigned range) : value(value), range(range) {
         if (value >= 360 || range >= 180) {
             throw std::out_of_range("value " + std::to_string(value) + " or range " + std::to_string(range) + " out of range");
         }
     }
-    uint16_t getValue() {
+    unsigned getValue() {
         return this->value;
     }
-    uint16_t getRange() {
+    unsigned getRange() {
         return this->range;
     }
 
 private:
-    uint16_t value;
-    uint16_t range;
+    unsigned value;
+    unsigned range;
 };
 
 struct Radius {
-    uint32_t radius;
+    unsigned radius;
 };
 
 struct BaseParameters {
@@ -106,7 +106,7 @@ struct TableParameters : public BaseParameters {
 };
 
 struct NearestParameters : public BaseParameters {
-    uint32_t num_of_results = 1;
+    unsigned num_of_results = 1;
 };
 
 struct TripParameters : public BaseParameters {
