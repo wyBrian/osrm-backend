@@ -15,6 +15,12 @@
 %include <typemaps.i>
 %include <enums.swg>
 
+%pragma(java) jniclasscode=%{
+    static {
+        System.loadLibrary("libswig_jni_bindings.so");
+    }
+%}
+
 %ignore std::vector<Coordinate>::vector(size_type);
 %template(CoordinateVector) std::vector<Coordinate>;
 
