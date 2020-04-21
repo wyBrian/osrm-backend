@@ -102,6 +102,7 @@ struct RouteParameters : public BaseParameters {
 struct TableParameters : public BaseParameters {
     std::vector<size_t> sources;
     std::vector<size_t> destinations;
+    bool distance_only = false;
 };
 
 struct NearestParameters : public BaseParameters {
@@ -133,7 +134,7 @@ struct TileParameters {
 
 class ServiceHandler {
 public:
-    explicit ServiceHandler(osrm::EngineConfig &config) : routing_machine(config) {
+    explicit ServiceHandler(EngineConfig &config) : engine_config(ServiceHandler::translate(config)), routing_machine(engine_config) {
     }
 
     ~ServiceHandler() {}
@@ -151,6 +152,8 @@ public:
     std::string Tile(const TileParameters &params);
 
 private:
+    osrm::EngineConfig engine_config;
+
     osrm::OSRM routing_machine;
 
     static osrm::engine::api::RouteParameters translate(const RouteParameters &raw);
