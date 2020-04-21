@@ -21,6 +21,8 @@
     }
 %}
 
+%apply long { std::size_t }; 
+
 %ignore std::vector<Coordinate>::vector(size_type);
 %template(CoordinateVector) std::vector<Coordinate>;
 
@@ -30,7 +32,7 @@
 %ignore std::vector<Radius>::vector(size_type);
 %template(RadiusVector) std::vector<Radius>;
 
-%template(SizeTVector) std::vector<size_t>;
+%template(SizeTVector) std::vector<std::size_t>;
 %template(LongVector) std::vector<long>;
 %template(DoubleVector) std::vector<double>;
 
