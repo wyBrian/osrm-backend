@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <functional>
+#include <util/json_renderer.hpp>
 
 //FIXME remove this when ready
 #pragma GCC diagnostic ignored "-Wunused-parameter"
@@ -201,7 +202,9 @@ osrm::engine::api::TileParameters ServiceHandler::translate(const TileParameters
 
 std::string ServiceHandler::serialize(const osrm::util::json::Object &json) {
     //TODO implement it
-    return "";
+    std::ostringstream os;
+    osrm::util::json::render(os, json);
+    return os.str();
 }
 
 osrm::engine::EngineConfig ServiceHandler::translate(const EngineConfig &raw) {
