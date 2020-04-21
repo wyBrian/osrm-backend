@@ -43,8 +43,8 @@ std::string ServiceHandler::Tile(const TileParameters &raw_params) {
 }
 
 osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParameters &raw) {
-    //TODO implement it
     osrm::RouteParameters params = osrm::engine::api::RouteParameters();
+
     params.alternatives = raw.alternatives;
     params.annotations = raw.annotations;
     params.annotations_type = osrm::engine::api::RouteParameters::AnnotationsType::All;
@@ -74,12 +74,60 @@ osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParamete
 }
 
 osrm::engine::api::TableParameters ServiceHandler::translate(const TableParameters &raw) {
-    //TODO implement it
-    return osrm::engine::api::TableParameters();
+    osrm::TableParameters params = osrm::engine::api::TableParameters();
+
+    params.annotations = osrm::engine::api::TableParameters::AnnotationsType::All;
+
+    auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
+    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_radiuses), ([] (Radius r) -> boost::optional<double>{
+        return boost::optional<double>((double)r.radius);
+    }));
+    params.radiuses = transformed_radiuses;
+
+    auto transformed_bearings = std::vector<boost::optional<osrm::engine::Bearing>>(raw.bearings.size());
+    std::transform(raw.bearings.begin(), raw.bearings.end(), std::back_inserter(transformed_bearings), ([] (Bearing r) -> boost::optional<osrm::engine::Bearing>{
+        return boost::optional<osrm::engine::Bearing>(osrm::engine::Bearing{(short)r.getValue(), (short)r.getRange()});
+    }));
+    params.bearings = transformed_bearings;
+
+    auto transformed_coordinates = std::vector<osrm::util::Coordinate>(raw.coordinates.size());
+    std::transform(raw.coordinates.begin(), raw.coordinates.end(), std::back_inserter(transformed_coordinates), ([] (Coordinate c) -> osrm::util::Coordinate{
+        return osrm::util::Coordinate(osrm::FloatLongitude{c.getLon()}, osrm::FloatLatitude{c.getLat()});
+    }));
+    params.coordinates = transformed_coordinates;
+
+    params.scale_factor = raw.scaleFactor;
+
+    params.sources = std::vector<std::size_t>(raw.sources);
+    params.destinations = std::vector<std::size_t>(raw.destinations);
+
+    return params;
 }
 
 osrm::engine::api::NearestParameters ServiceHandler::translate(const NearestParameters &raw) {
     //TODO implement it
+    osrm::NearestParameters params = osrm::engine::api::NearestParameters();
+
+    auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
+    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_radiuses), ([] (Radius r) -> boost::optional<double>{
+        return boost::optional<double>((double)r.radius);
+    }));
+    params.radiuses = transformed_radiuses;
+
+    auto transformed_bearings = std::vector<boost::optional<osrm::engine::Bearing>>(raw.bearings.size());
+    std::transform(raw.bearings.begin(), raw.bearings.end(), std::back_inserter(transformed_bearings), ([] (Bearing r) -> boost::optional<osrm::engine::Bearing>{
+        return boost::optional<osrm::engine::Bearing>(osrm::engine::Bearing{(short)r.getValue(), (short)r.getRange()});
+    }));
+    params.bearings = transformed_bearings;
+
+    auto transformed_coordinates = std::vector<osrm::util::Coordinate>(raw.coordinates.size());
+    std::transform(raw.coordinates.begin(), raw.coordinates.end(), std::back_inserter(transformed_coordinates), ([] (Coordinate c) -> osrm::util::Coordinate{
+        return osrm::util::Coordinate(osrm::FloatLongitude{c.getLon()}, osrm::FloatLatitude{c.getLat()});
+    }));
+    params.coordinates = transformed_coordinates;
+
+    params.number_of_results = raw.num_of_results;
+
     return osrm::engine::api::NearestParameters();
 }
 

@@ -100,13 +100,13 @@ struct RouteParameters : public BaseParameters {
 };
 
 struct TableParameters : public BaseParameters {
-    std::vector<size_t> sources;
-    std::vector<size_t> destinations;
-    bool returnDistanceOnly = false;
+    std::vector<std::size_t> sources;
+    std::vector<std::size_t> destinations;
+    float scaleFactor = 1.0;
 };
 
 struct NearestParameters : public BaseParameters {
-    uint32_t number = 1;
+    uint32_t num_of_results = 1;
 };
 
 struct TripParameters : public BaseParameters {
