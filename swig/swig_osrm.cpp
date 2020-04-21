@@ -59,13 +59,13 @@ osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParamete
     params.radiuses = transformed_radiuses;
 
     auto transformed_bearings = std::vector<boost::optional<osrm::engine::Bearing>>(raw.bearings.size());
-    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_bearings), ([] (Bearing r) -> boost::optional<osrm::engine::Bearing>{
+    std::transform(raw.bearings.begin(), raw.bearings.end(), std::back_inserter(transformed_bearings), ([] (Bearing r) -> boost::optional<osrm::engine::Bearing>{
         return boost::optional<osrm::engine::Bearing>(osrm::engine::Bearing{(short)r.getValue(), (short)r.getRange()});
     }));
     params.bearings = transformed_bearings;
 
     auto transformed_coordinates = std::vector<osrm::util::Coordinate>(raw.coordinates.size());
-    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_coordinates), ([] (Coordinate c) -> osrm::util::Coordinate{
+    std::transform(raw.coordinates.begin(), raw.coordinates.end(), std::back_inserter(transformed_coordinates), ([] (Coordinate c) -> osrm::util::Coordinate{
         return osrm::util::Coordinate(osrm::FloatLongitude{c.getLon()}, osrm::FloatLatitude{c.getLat()});
     }));
     params.coordinates = transformed_coordinates;
