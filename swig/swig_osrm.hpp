@@ -68,16 +68,16 @@ public:
             throw std::out_of_range("value " + std::to_string(value) + " or range " + std::to_string(range) + " out of range");
         }
     }
-    int getValue() {
+    uint16_t getValue() {
         return this->value;
     }
-    int getRange() {
+    uint16_t getRange() {
         return this->range;
     }
 
 private:
-    uint32_t value;
-    uint32_t range;
+    uint16_t value;
+    uint16_t range;
 };
 
 struct Radius {
@@ -102,7 +102,7 @@ struct RouteParameters : public BaseParameters {
 struct TableParameters : public BaseParameters {
     std::vector<size_t> sources;
     std::vector<size_t> destinations;
-    bool distance_only = false;
+    bool returnDistanceOnly = false;
 };
 
 struct NearestParameters : public BaseParameters {

@@ -1,5 +1,8 @@
 #include "swig_osrm.hpp"
 
+#include <algorithm>
+#include <functional>
+
 //FIXME remove this when ready
 #pragma GCC diagnostic ignored "-Wunused-parameter"
 
@@ -41,7 +44,33 @@ std::string ServiceHandler::Tile(const TileParameters &raw_params) {
 
 osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParameters &raw) {
     //TODO implement it
-    return osrm::engine::api::RouteParameters();
+    osrm::RouteParameters params = osrm::engine::api::RouteParameters();
+    params.alternatives = raw.alternatives;
+    params.annotations = raw.annotations;
+    params.annotations_type = osrm::engine::api::RouteParameters::AnnotationsType::All;
+    params.geometries = raw.returnGeoJson ? osrm::engine::api::RouteParameters::GeometriesType::GeoJSON : osrm::engine::api::RouteParameters::GeometriesType::Polyline;
+    params.steps = raw.steps;
+    params.overview = raw.returnOverview ? osrm::engine::api::RouteParameters::OverviewType::Full : osrm::engine::api::RouteParameters::OverviewType::False;
+
+    auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
+    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_radiuses), ([] (Radius r) -> boost::optional<double>{
+        return boost::optional<double>((double)r.radius);
+    }));
+    params.radiuses = transformed_radiuses;
+
+    auto transformed_bearings = std::vector<boost::optional<osrm::engine::Bearing>>(raw.bearings.size());
+    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_bearings), ([] (Bearing r) -> boost::optional<osrm::engine::Bearing>{
+        return boost::optional<osrm::engine::Bearing>(osrm::engine::Bearing{(short)r.getValue(), (short)r.getRange()});
+    }));
+    params.bearings = transformed_bearings;
+
+    auto transformed_coordinates = std::vector<osrm::util::Coordinate>(raw.coordinates.size());
+    std::transform(raw.radiuses.begin(), raw.radiuses.end(), std::back_inserter(transformed_coordinates), ([] (Coordinate c) -> osrm::util::Coordinate{
+        return osrm::util::Coordinate(osrm::FloatLongitude{c.getLon()}, osrm::FloatLatitude{c.getLat()});
+    }));
+    params.coordinates = transformed_coordinates;
+
+    return params;
 }
 
 osrm::engine::api::TableParameters ServiceHandler::translate(const TableParameters &raw) {
