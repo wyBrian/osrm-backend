@@ -122,7 +122,6 @@ struct MatchParameters : public BaseParameters {
     bool returnGeoJson = true;
     bool returnOverview = false;
     std::vector<long> timestamps;
-    std::vector<double> radiuses;
 };
 
 struct TileParameters {
