@@ -199,11 +199,10 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
 
   set(UseSWIG_MODULE_VERSION 2)
 
-  set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/swig)
-
   if (ENABLE_SWIG_PYTHON_BINDINGS)
     set(SWIG_PYTHON_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
     message(STATUS "Swig Python output dir: ${SWIG_PYTHON_OUTPUT_DIR}")
+    set(CMAKE_SWIG_OUTDIR ${SWIG_PYTHON_OUTPUT_DIR})
     swig_add_library(
             pyosrm
             TYPE MODULE
@@ -220,11 +219,12 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
             ARCHIVE_OUTPUT_DIRECTORY ${SWIG_PYTHON_OUTPUT_DIR}
             RUNTIME_OUTPUT_DIRECTORY ${SWIG_PYTHON_OUTPUT_DIR}
     )
-    target_link_libraries(_pyosrm PRIVATE osrm PYTHON_LIBRARY)
+    target_link_libraries(_pyosrm PRIVATE osrm ${PYTHON_LIBRARY})
   endif()
   if (ENABLE_SWIG_JNI_BINDINGS)
     set(SWIG_JNI_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
     set(CMAKE_SWIG_FLAGS -package "osrm.jni")
+    set(CMAKE_SWIG_OUTDIR ${SWIG_JNI_OUTPUT_DIR})
     message(STATUS "Swig JNI output dir: ${SWIG_JNI_OUTPUT_DIR}")
     swig_add_library(
             SWIG_JNI
