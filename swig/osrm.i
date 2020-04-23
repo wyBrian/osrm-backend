@@ -6,14 +6,17 @@
 %}
 
 #ifdef SWIGJAVA
+%include <swiginterface.i>
+%include <enums.swg>
+#endif
+
+#ifdef SWIGPYTHON
 #endif
 
 %include <stl.i>
 %include <std_string.i>
 %include <std_except.i>
-%include <swiginterface.i>
 %include <typemaps.i>
-%include <enums.swg>
 
 %pragma(java) jniclasscode=%{
     static {
@@ -21,18 +24,18 @@
     }
 %}
 
-%apply long { std::size_t }; 
-
 %ignore std::vector<Coordinate>::vector(size_type);
+%ignore std::vector<Coordinate>::resize(size_type);
 %template(CoordinateVector) std::vector<Coordinate>;
 
 %ignore std::vector<Bearing>::vector(size_type);
+%ignore std::vector<Bearing>::resize(size_type);
 %template(BearingVector) std::vector<Bearing>;
 
 %ignore std::vector<Radius>::vector(size_type);
+%ignore std::vector<Radius>::resize(size_type);
 %template(RadiusVector) std::vector<Radius>;
 
-%template(SizeTVector) std::vector<std::size_t>;
 %template(LongVector) std::vector<long>;
 %template(DoubleVector) std::vector<double>;
 

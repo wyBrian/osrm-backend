@@ -201,7 +201,6 @@ osrm::engine::api::TileParameters ServiceHandler::translate(const TileParameters
 }
 
 std::string ServiceHandler::serialize(const osrm::util::json::Object &json) {
-    //TODO implement it
     std::ostringstream os;
     osrm::util::json::render(os, json);
     return os.str();

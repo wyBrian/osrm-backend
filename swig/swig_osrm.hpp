@@ -100,8 +100,8 @@ struct RouteParameters : public BaseParameters {
 };
 
 struct TableParameters : public BaseParameters {
-    std::vector<std::size_t> sources;
-    std::vector<std::size_t> destinations;
+    std::vector<long> sources;
+    std::vector<long> destinations;
     float scaleFactor = 1.0;
 };
 

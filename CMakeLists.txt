@@ -20,19 +20,19 @@ endif()
 
 option(ENABLE_MASON "Use mason for dependencies" OFF)
 option(ENABLE_CCACHE "Speed up incremental rebuilds via ccache" ON)
-option(BUILD_TOOLS "Build OSRM tools" OFF)
-option(BUILD_PACKAGE "Build OSRM package" OFF)
+option(BUILD_TOOLS "Build OSRM tools" ON)
+option(BUILD_PACKAGE "Build OSRM package" ON)
 option(ENABLE_ASSERTIONS "Use assertions in release mode" OFF)
 option(ENABLE_COVERAGE "Build with coverage instrumentalisation" OFF)
 option(ENABLE_SANITIZER "Use memory sanitizer for Debug build" OFF)
-option(ENABLE_STXXL "Use STXXL library" OFF)
+option(ENABLE_STXXL "Use STXXL library" ON)
 option(ENABLE_LTO "Use LTO if available" OFF)
 option(ENABLE_FUZZING "Fuzz testing using LLVM's libFuzzer" OFF)
 option(ENABLE_GOLD_LINKER "Use GNU gold linker if available" ON)
 option(ENABLE_NODE_BINDINGS "Build NodeJs bindings" OFF)
 option(ENABLE_GLIBC_WORKAROUND "Workaround GLIBC symbol exports" OFF)
-option(ENABLE_SWIG_JNI_BINDINGS "Use SWIG to compile Java bindings" ON)
 option(ENABLE_SWIG_PYTHON_BINDINGS "Use SWIG to compile Python bindings" ON)
+option(ENABLE_SWIG_JNI_BINDINGS "Use SWIG to compile Java bindings" ON)
 
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
 
@@ -179,10 +179,13 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
     set(JAVA_AWT_LIBRARY NotNeeded)
     set(JAVA_AWT_INCLUDE_PATH NotNeeded)
     find_package(JNI 1.8 REQUIRED)
+    include_directories(SYSTEM "${JAVA_INCLUDE_PATH}")
+    include_directories(SYSTEM "${JAVA_INCLUDE_PATH2}")
   endif()
   if (ENABLE_SWIG_PYTHON_BINDINGS)
     find_package(PythonInterp REQUIRED)
     find_package(PythonLibs REQUIRED)
+    include_directories(SYSTEM "${PYTHON_INCLUDE_PATH}")
   endif()
   include(${SWIG_USE_FILE})
   set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
@@ -196,9 +199,31 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
 
   set(UseSWIG_MODULE_VERSION 2)
 
+  set(CMAKE_SWIG_OUTDIR ${CMAKE_CURRENT_BINARY_DIR}/swig)
+
+  if (ENABLE_SWIG_PYTHON_BINDINGS)
+    set(SWIG_PYTHON_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
+    message(STATUS "Swig Python output dir: ${SWIG_PYTHON_OUTPUT_DIR}")
+    swig_add_library(
+            pyosrm
+            TYPE MODULE
+            LANGUAGE python
+            OUTPUT_DIR ${SWIG_PYTHON_OUTPUT_DIR}
+            OUTFILE_DIR ${SWIG_PYTHON_OUTPUT_DIR}
+            SOURCES ${SwigSourcesGlob}
+    )
+    set_target_properties (
+            _pyosrm PROPERTIES
+            SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
+            OUTPUT_NAME swig_python_bindings
+            LIBRARY_OUTPUT_DIRECTORY ${SWIG_PYTHON_OUTPUT_DIR}
+            ARCHIVE_OUTPUT_DIRECTORY ${SWIG_PYTHON_OUTPUT_DIR}
+            RUNTIME_OUTPUT_DIRECTORY ${SWIG_PYTHON_OUTPUT_DIR}
+    )
+    target_link_libraries(_pyosrm PRIVATE osrm PYTHON_LIBRARY)
+  endif()
   if (ENABLE_SWIG_JNI_BINDINGS)
     set(SWIG_JNI_OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/java")
-    set(CMAKE_SWIG_OUTDIR ${SWIG_JNI_OUTPUT_DIR})
     set(CMAKE_SWIG_FLAGS -package "osrm.jni")
     message(STATUS "Swig JNI output dir: ${SWIG_JNI_OUTPUT_DIR}")
     swig_add_library(
@@ -209,8 +234,6 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
             OUTFILE_DIR ${SWIG_JNI_OUTPUT_DIR}
             SOURCES ${SwigSourcesGlob}
     )
-    include_directories(SYSTEM "${JAVA_INCLUDE_PATH}")
-    include_directories(SYSTEM "${JAVA_INCLUDE_PATH2}")
     set_target_properties (
             SWIG_JNI PROPERTIES
             SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
@@ -222,23 +245,6 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
     target_link_libraries(SWIG_JNI PRIVATE osrm ${JAVA_JVM_LIBRARY})
     #TODO compile the Java file generate and install
   endif()
-#  if (ENABLE_SWIG_PYTHON_BINDINGS)
-#    swig_add_library(
-#            SWIG_JNI
-#            TYPE SHARED
-#            LANGUAGE java
-#            OUTPUT_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-#            OUTFILE_DIR "${CMAKE_CURRENT_BINARY_DIR}/swig/java"
-#            SOURCES ${SwigSourcesGlob}
-#    )
-#    set_target_properties (SWIG_PYTHON PROPERTIES
-#            SWIG_USE_TARGET_INCLUDE_DIRECTORIES TRUE
-#            OUTPUT_NAME swig_python_bindings
-#            LIBRARY_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-#            ARCHIVE_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python"
-#            RUNTIME_OUTPUT_DIRECTORY "${CMAKE_CURRENT_BINARY_DIR}/swig/python")
-#    target_link_libraries(SWIG_PYTHON PRIVATE osrm)
-#  endif()
 endif()
 
 set_target_properties(UTIL PROPERTIES LINKER_LANGUAGE CXX)
@@ -850,8 +856,12 @@ install(TARGETS osrm_customize DESTINATION lib)
 install(TARGETS osrm_update DESTINATION lib)
 install(TARGETS osrm_contract DESTINATION lib)
 install(TARGETS osrm_store DESTINATION lib)
-install(TARGETS SWIG_JNI DESTINATION lib)
-
+if (ENABLE_SWIG_JNI_BINDINGS)
+  install(TARGETS SWIG_JNI DESTINATION lib)
+endif()
+if (ENABLE_SWIG_JNI_BINDINGS)
+  install(TARGETS _pyosrm DESTINATION lib)
+endif()
 
 # Install profiles and support library to /usr/local/share/osrm/profiles by default
 set(DefaultProfilesDir profiles)
