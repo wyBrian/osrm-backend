@@ -9,38 +9,37 @@
 
 std::string ServiceHandler::Route(const RouteParameters &raw_params) {
     osrm::util::json::Object json;
-    auto res = this->routing_machine.Route(ServiceHandler::translate(raw_params), json);
-    return (res == osrm::engine::Status::Ok) ? ServiceHandler::serialize(json) : "Error";
+    this->routing_machine.Route(ServiceHandler::translate(raw_params), json);
+    return ServiceHandler::serialize(json);
 }
 
 std::string ServiceHandler::Table(const TableParameters &raw_params) {
     osrm::util::json::Object json;
-    auto res = this->routing_machine.Table(ServiceHandler::translate(raw_params), json);
-    return (res == osrm::engine::Status::Ok) ? ServiceHandler::serialize(json) : "Error";
+    this->routing_machine.Table(ServiceHandler::translate(raw_params), json);
+    return ServiceHandler::serialize(json);
 }
 
 std::string ServiceHandler::Nearest(const NearestParameters &raw_params) {
     osrm::util::json::Object json;
-    auto res = this->routing_machine.Nearest(ServiceHandler::translate(raw_params), json);
-    return (res == osrm::engine::Status::Ok) ? ServiceHandler::serialize(json) : "Error";
+    this->routing_machine.Nearest(ServiceHandler::translate(raw_params), json);
+    return ServiceHandler::serialize(json);
 }
 
 std::string ServiceHandler::Trip(const TripParameters &raw_params) {
     osrm::util::json::Object json;
-    auto res = this->routing_machine.Trip(ServiceHandler::translate(raw_params), json);
-    return (res == osrm::engine::Status::Ok) ? ServiceHandler::serialize(json) : "Error";
-}
+    this->routing_machine.Trip(ServiceHandler::translate(raw_params), json);
+    return ServiceHandler::serialize(json);}
 
 std::string ServiceHandler::Match(const MatchParameters &raw_params) {
     osrm::util::json::Object json;
-    auto res = this->routing_machine.Match(ServiceHandler::translate(raw_params), json);
-    return (res == osrm::engine::Status::Ok) ? ServiceHandler::serialize(json) : "Error";
+    this->routing_machine.Match(ServiceHandler::translate(raw_params), json);
+    return ServiceHandler::serialize(json);
 }
 
 std::string ServiceHandler::Tile(const TileParameters &raw_params) {
     std::string result;
-    auto res = this->routing_machine.Tile(ServiceHandler::translate(raw_params), result);
-    return (res == osrm::engine::Status::Ok) ? result : "Error";
+    this->routing_machine.Tile(ServiceHandler::translate(raw_params), result);
+    return result;
 }
 
 osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParameters &raw) {
