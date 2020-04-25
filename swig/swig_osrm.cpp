@@ -128,7 +128,7 @@ osrm::engine::api::NearestParameters ServiceHandler::translate(const NearestPara
 
     params.number_of_results = raw.num_of_results;
 
-    return osrm::engine::api::NearestParameters();
+    return params;
 }
 
 osrm::engine::api::TripParameters ServiceHandler::translate(const TripParameters &raw) {
@@ -157,7 +157,7 @@ osrm::engine::api::TripParameters ServiceHandler::translate(const TripParameters
     }));
     params.coordinates = std::move(transformed_coordinates);
 
-    return osrm::engine::api::TripParameters();
+    return params;
 }
 
 osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParameters &raw) {
@@ -192,7 +192,7 @@ osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParamete
     }));
     params.timestamps = std::move(transformed_timestamps);
 
-    return osrm::engine::api::MatchParameters();
+    return params;
 }
 
 osrm::engine::api::TileParameters ServiceHandler::translate(const TileParameters &raw) {
