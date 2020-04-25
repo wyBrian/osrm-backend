@@ -218,7 +218,7 @@ osrm::engine::EngineConfig ServiceHandler::translate(const EngineConfig &raw) {
     cfg.max_alternatives = raw.max_alternatives;
     cfg.use_shared_memory = false;
     cfg.use_mmap = raw.use_mmap;
-    cfg.algorithm = raw.useMld ? osrm::engine::EngineConfig::Algorithm::MLD : osrm::engine::EngineConfig::Algorithm::CH;
+    cfg.algorithm = raw.use_mld ? osrm::engine::EngineConfig::Algorithm::MLD : osrm::engine::EngineConfig::Algorithm::CH;
     cfg.verbosity = raw.verbosity;
     cfg.dataset_name = raw.dataset_name;
     return cfg;

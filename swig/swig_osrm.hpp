@@ -33,7 +33,7 @@ struct EngineConfig {
     int max_results_nearest = -1;
     int max_alternatives = 3;
     bool use_mmap = false;
-    bool useMld = false;
+    bool use_mld = false;
     std::string verbosity;
     std::string dataset_name;
 };
