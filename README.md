@@ -178,3 +178,18 @@ When using the code in a (scientific) publication, please cite
  address = {New York, NY, USA},
 }
 ```
+
+
+## Build On MacOS
+```bash
+brew install boost git cmake libzip libstxxl libxml2 lua tbb ccache
+brew install GDAL
+mkdir -p build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release -DENABLE_MASON=OFF -DENABLE_SWIG_PYTHON_BINDINGS=OFF -DBUILD_PACKAGE=OFF
+cmake --build .
+sudo cmake --build . --target install
+```
+
+
+
