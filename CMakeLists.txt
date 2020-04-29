@@ -187,8 +187,10 @@ if (ENABLE_SWIG_JNI_BINDINGS OR ENABLE_SWIG_PYTHON_BINDINGS)
     include_directories(SYSTEM "${PYTHON_INCLUDE_PATH}")
   endif()
   include(${SWIG_USE_FILE})
-  #set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
+
+  # set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON COMPILE_OPTIONS -includeall)
   set_source_files_properties(swig/osrm.i PROPERTIES CPLUSPLUS ON)
+
   # Use the newer target name preference
   set(UseSWIG_TARGET_NAME_PREFERENCE "STANDARD")
 
