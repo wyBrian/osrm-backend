@@ -11,6 +11,7 @@
 #endif
 
 #ifdef SWIGPYTHON
+#pragma GCC diagnostic ignored "-Wunused-parameter"
 #endif
 
 %include <stl.i>
