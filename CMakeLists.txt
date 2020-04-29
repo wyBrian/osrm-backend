@@ -724,8 +724,6 @@ target_link_libraries(osrm-customize osrm_customize ${Boost_PROGRAM_OPTIONS_LIBR
 target_link_libraries(osrm-contract osrm_contract ${Boost_PROGRAM_OPTIONS_LIBRARY})
 target_link_libraries(osrm-routed osrm ${Boost_PROGRAM_OPTIONS_LIBRARY} ${OPTIONAL_SOCKET_LIBS} ${ZLIB_LIBRARY})
 
-SET(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -W-unused-variable")
-
 set(EXTRACTOR_LIBRARIES
     ${BZIP2_LIBRARIES}
     ${Boost_REGEX_LIBRARY}
