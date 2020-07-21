@@ -38,6 +38,7 @@
 %template(RadiusVector) std::vector<Radius>;
 
 %template(LongVector) std::vector<long>;
+%template(UnsignedLongVector) std::vector<unsigned long>;
 %template(DoubleVector) std::vector<double>;
 
 %include "swig_osrm.hpp"
