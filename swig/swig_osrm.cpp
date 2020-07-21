@@ -54,7 +54,7 @@ osrm::engine::api::RouteParameters ServiceHandler::translate(const RouteParamete
 
     auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
     std::transform(raw.radiuses.begin(), raw.radiuses.end(), transformed_radiuses.begin(), ([] (Radius r) -> boost::optional<double>{
-        return boost::optional<double>((double)r.radius);
+        return boost::optional<double>(r.radius);
     }));
     params.radiuses = std::move(transformed_radiuses);
 
@@ -80,7 +80,7 @@ osrm::engine::api::TableParameters ServiceHandler::translate(const TableParamete
 
     auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
     std::transform(raw.radiuses.begin(), raw.radiuses.end(), transformed_radiuses.begin(), ([] (Radius r) -> boost::optional<double>{
-        return boost::optional<double>((double)r.radius);
+        return boost::optional<double>(r.radius);
     }));
     params.radiuses = std::move(transformed_radiuses);
 
@@ -109,7 +109,7 @@ osrm::engine::api::NearestParameters ServiceHandler::translate(const NearestPara
 
     auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
     std::transform(raw.radiuses.begin(), raw.radiuses.end(), transformed_radiuses.begin(), ([] (Radius r) -> boost::optional<double>{
-        return boost::optional<double>((double)r.radius);
+        return boost::optional<double>(r.radius);
     }));
     params.radiuses = std::move(transformed_radiuses);
 
@@ -140,7 +140,7 @@ osrm::engine::api::TripParameters ServiceHandler::translate(const TripParameters
 
     auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
     std::transform(raw.radiuses.begin(), raw.radiuses.end(), transformed_radiuses.begin(), ([] (Radius r) -> boost::optional<double>{
-        return boost::optional<double>((double)r.radius);
+        return boost::optional<double>(r.radius);
     }));
     params.radiuses = std::move(transformed_radiuses);
 
@@ -166,10 +166,13 @@ osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParamete
     params.geometries = raw.returnGeoJson ? osrm::engine::api::RouteParameters::GeometriesType::GeoJSON : osrm::engine::api::RouteParameters::GeometriesType::Polyline;
     params.steps = raw.steps;
     params.overview = raw.returnOverview ? osrm::engine::api::RouteParameters::OverviewType::Full : osrm::engine::api::RouteParameters::OverviewType::False;
+    params.gaps = raw.gaps ? osrm::engine::api::MatchParameters::GapsType::Split : osrm::engine::api::MatchParameters::GapsType::Ignore;
+    params.tidy = raw.tidy;
+
 
     auto transformed_radiuses = std::vector<boost::optional<double>>(raw.radiuses.size());
     std::transform(raw.radiuses.begin(), raw.radiuses.end(), transformed_radiuses.begin(), ([] (Radius r) -> boost::optional<double>{
-        return boost::optional<double>((double)r.radius);
+        return boost::optional<double>(r.radius);
     }));
     params.radiuses = std::move(transformed_radiuses);
 

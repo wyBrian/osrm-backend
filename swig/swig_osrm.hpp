@@ -81,7 +81,7 @@ private:
 };
 
 struct Radius {
-    unsigned radius;
+    double radius;
 };
 
 struct BaseParameters {
@@ -117,6 +117,8 @@ struct TripParameters : public BaseParameters {
 };
 
 struct MatchParameters : public BaseParameters {
+    bool gaps = true;
+    bool tidy = false;
     bool steps = false;
     bool annotations = false;
     bool returnGeoJson = true;
