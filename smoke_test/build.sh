@@ -1,0 +1,1 @@
+g++ -I/Users/yu.w/workspace/apollo/osrm-backend/include -I/Users/yu.w/workspace/apollo/osrm-backend/swig smoke_test.cpp -g -Wall -o osrm-smoke-test
