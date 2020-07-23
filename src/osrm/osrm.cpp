@@ -10,6 +10,9 @@
 #include "engine/engine_config.hpp"
 #include "engine/status.hpp"
 
+#include <boost/optional.hpp>
+#include <boost/optional/optional_io.hpp>
+
 #include <memory>
 
 namespace osrm
@@ -78,8 +81,42 @@ engine::Status OSRM::Trip(const engine::api::TripParameters &params, json::Objec
     return engine_->Trip(params, result);
 }
 
+template <typename Enumeration>
+auto as_integer(Enumeration const value)
+    -> typename std::underlying_type<Enumeration>::type
+{
+    return static_cast<typename std::underlying_type<Enumeration>::type>(value);
+}
+
 engine::Status OSRM::Match(const engine::api::MatchParameters &params, json::Object &result) const
 {
+    std::cout << "DEBUGGING MATCH SERVICE" << std::endl;
+    std::cout << "timestamps" << std::endl;
+    for(unsigned t : params.timestamps) {
+        std::cout << t << std::endl;
+    }
+    std::cout << "radiuses" << std::endl;
+    for(boost::optional<double> r : params.radiuses) {
+        std::cout << r << std::endl;
+    }
+    std::cout << "coordinates" << std::endl;
+    for(util::Coordinate c : params.coordinates) {
+        std::cout << "lat: " << c.lat << " lon: " << c.lon << std::endl;
+    }
+    std::cout << "waypoints" << std::endl;
+    for(std::size_t wp : params.waypoints) {
+        std::cout << wp << std::endl;
+    }
+    std::cout << "tidy: " << params.tidy << std::endl;    
+    std::cout << "gaps: " << as_integer(params.gaps) << std::endl;    
+    std::cout << "steps: " << params.steps << std::endl;    
+    std::cout << "alternatives: " << params.alternatives << std::endl;    
+    std::cout << "number_of_alternatives: " << params.number_of_alternatives << std::endl;    
+    std::cout << "annotations: " << params.annotations << std::endl;    
+    std::cout << "annotations_type: " << as_integer(params.annotations_type) << std::endl;    
+    std::cout << "geometries: " << as_integer(params.geometries) << std::endl;    
+    std::cout << "overview: " << as_integer(params.overview) << std::endl;    
+    std::cout << "continue_straight: " << params.continue_straight << std::endl;    
     return engine_->Match(params, result);
 }
 
