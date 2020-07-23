@@ -190,7 +190,7 @@ osrm::engine::api::MatchParameters ServiceHandler::translate(const MatchParamete
 
     auto transformed_timestamps = std::vector<unsigned>(raw.timestamps.size());
     std::transform(raw.timestamps.begin(), raw.timestamps.end(), transformed_timestamps.begin(), ([] (long ts) -> unsigned{
-        return ts / 1000;
+        return ts;
     }));
     params.timestamps = std::move(transformed_timestamps);
 
