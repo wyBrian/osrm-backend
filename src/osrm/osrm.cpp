@@ -10,9 +10,6 @@
 #include "engine/engine_config.hpp"
 #include "engine/status.hpp"
 
-#include <boost/optional.hpp>
-#include <boost/optional/optional_io.hpp>
-
 #include <memory>
 
 namespace osrm
